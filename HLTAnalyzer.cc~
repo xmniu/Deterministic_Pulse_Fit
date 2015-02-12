@@ -1,0 +1,60 @@
+#include <iostream>
+#include <cmath>
+#include <climits>
+#include "HLTAnalyzer.h"
+//#include "isFinite.h"
+
+
+// Here I have created a mostly blank class where the HLT code can be added
+// If you do not alter the arguments for the apply function it 
+// is already implemented correctly
+
+HLTAnalyzer::HLTAnalyzer() {
+}
+
+HLTAnalyzer::~HLTAnalyzer() { 
+}
+
+// NOTE -- Charge here is *NOT* to be pedestal subtracted in the standalone version
+// I have set it up so that we pass it something with Charge + Pedestal, as we 
+// originally used in CMSSW. A later function performed pedestal subraction.
+void HLTAnalyzer::apply(const std::vector<double> & inputCharge, const std::vector<double> & inputPedestal, const std::vector<double> & inputGain, std::vector<double> & correctedOutput) const
+{
+
+   //const unsigned int cssize = cs.size(); // Removed for standalone code
+   
+   // Initialize the Arrays
+   // We later pass these to the function which handles the fitting
+   double chargeArr[10]={}, pedArr[10]={}, gainArr[10]={};
+   double energyArr[10]={}, pedenArr[10]={};
+   double tsTOT = 0, tstrig = 0; // in fC
+   double tsTOTen = 0; // in GeV
+   
+   // Loop through all TS and fill arrays
+   for(unsigned int ip=0; ip<10; ++ip){
+      if( ip >= (unsigned) 10 ) continue; // Too many samples than what we wanna fit (10 is enough...) -> skip them
+//       const int capid = capidvec[ip];          // For CMSSW Version, Removed for Standalone  Testing
+//       double charge = cs[ip];                  // For CMSSW Version, Removed for Standalone  Testing
+//       double ped = calibs.pedestal(capid);     // For CMSSW Version, Removed for Standalone  Testing
+//       double gain = calibs.respcorrgain(capid);// For CMSSW Version, Removed for Standalone  Testing
+      double gain = inputGain[ip];
+      double charge = inputCharge[ip];
+      double ped = inputPedestal[ip];
+
+      double energy = charge*gain;
+      double peden = ped*gain;
+
+      chargeArr[ip] = charge; pedArr[ip] = ped; gainArr[ip] = gain;
+      energyArr[ip] = energy; pedenArr[ip] = peden;
+
+      
+      
+      
+      
+   std::vector<double> fitParsVec; // Put the time & energy determined by method into this vector
+   // Fitting Function: 
+   // pulseShapeFit(energyArr, pedenArr, chargeArr, pedArr, gainArr, tsTOTen, fitParsVec);
+   
+   // Replace the corected output vecto
+   correctedOutput.swap(fitParsVec);
+}

@@ -1,0 +1,10 @@
+#example1.txt
+
+#this is a comment
+number1 42
+mW 80.41 #GeV
+
+myString "hallo world"
+myVector 12 13 14
+specialstrings "\"hallo world\"" "\\" "#" "\eta"#comment "
+

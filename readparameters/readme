@@ -1,0 +1,3 @@
+How to run the example:
+gmake
+./example1 example1.txt
